@@ -1,0 +1,42 @@
+<f:layout name="Default" />
+<f:section name="Content">
+  <f:if condition="{tag}">
+    <f:then>
+        <f:render partial="List" arguments="{_all}" />
+      <f:spaceless>
+          {"tagDetail":
+          <f:format.raw>
+            <f:format.json value="{
+                uid: tag.uid,
+                title: tag.title,
+                tagLink: '{blogvh:link.tag(tag: tag, rss: true)}',
+                description: '{f:if(condition: tag.description, then: tag.description)}',
+                tagUid: '{f:if(condition: settings.tagUid, then: settings.tagUid)}',
+                linkPage: '{f:link.page(pageUid: settings.tagUid)}',
+                contentElementUidList: '{tag.contentElementUidList -> f:cObject(typoscriptObjectPath: \'lib.blog.contentElementRendering\')}'
+            }"/>}
+          </f:format.raw>
+      </f:spaceless>
+    </f:then>
+    <f:else>
+        <f:spaceless>
+          {"listTags": [<f:for each="{tags}" iteration="tagsIterator" as="tag">
+          <f:render section="tagsView" arguments="{tag: tag,settings:settings,tagsIterator:tagsIterator}" />
+          {f:if(condition: tagsIterator.isLast, else: ',')}
+        </f:for>]}
+        </f:spaceless>
+    </f:else>
+  </f:if>
+</f:section>
+<f:section name="tagsView">
+  <f:spaceless>
+    <f:format.raw>
+      <f:format.json value="{
+        uid: tag.uid,
+        title: tag.title,
+        description: '{f:if(condition: tag.description, then: tag.description)}',
+        tagUid: settings.tagUid
+      }"/>
+    </f:format.raw>
+  </f:spaceless>
+</f:section>

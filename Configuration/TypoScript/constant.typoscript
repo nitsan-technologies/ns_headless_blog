@@ -1,0 +1,6 @@
+#plugin.tx_blog {
+#    view {
+#        templateRootPath = EXT:ns_headless_blog/Resources/Private/Blog/Templates/
+#        partialRootPath = EXT:ns_headless_blog/Resources/Private/Blog/Partials/
+#    }
+#}

@@ -1,0 +1,41 @@
+<f:layout name="Default" />
+<f:section name="Content">
+    <f:if condition="{category}">
+        <f:then>
+            <f:render partial="List" arguments="{_all}" />
+            <f:spaceless>
+                {"categoryDetail":
+                <f:format.raw>
+                    <f:format.json value="{
+                        uid: category.uid,
+                        title: category.title,
+                        description: '{f:if(condition: category.description, then: category.description)}',
+                        categoryUidUid: '{f:if(condition: settings.categoryUid, then: settings.categoryUid)}',
+                        linkPage: '{f:link.page(pageUid: settings.categoryUid)}',
+                        contentElementUidList: '{category.contentElementUidList -> f:cObject(typoscriptObjectPath: \'lib.blog.contentElementRendering\')}'
+                    }"/>}
+                </f:format.raw>
+            </f:spaceless>
+        </f:then>
+        <f:else>
+            <f:spaceless>
+                {"listCategory": [<f:for each="{categories}" iteration="categoryIterator" as="category">
+                <f:render section="categoryView" arguments="{category: category,settings:settings,categoryIterator:categoryIterator}" />
+                {f:if(condition: categoryIterator.isLast, else: ',')}
+            </f:for>]}
+            </f:spaceless>
+        </f:else>
+    </f:if>
+</f:section>
+<f:section name="categoryView">
+    <f:spaceless>
+        <f:format.raw>
+            <f:format.json value="{
+                    uid: category.uid,
+                    title: category.title,
+                    description: '{f:if(condition: category.description, then: category.description)}',
+                    categoryUid: settings.categoryUid,
+                }"/>
+        </f:format.raw>
+    </f:spaceless>
+</f:section>

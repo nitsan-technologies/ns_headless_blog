@@ -1,0 +1,157 @@
+<f:if condition="{pagination} && {pagination.paginatedItems}">
+    <f:then>
+        <f:if condition="{settings.lists.pagination.insertAbove}">
+            <f:spaceless>
+                {"paginationAbove":  <f:render partial="Pagination/Pagination" arguments="{pagination: pagination}" />
+            </f:spaceless>
+        </f:if>
+            <f:spaceless>
+            ,"list": [<f:for each="{pagination.paginatedItems}" iteration="postIterator" as="post">
+                <blogvh:cache post="{post}" />
+                <f:render section="PostListView" arguments="{post: post,settings:settings,postIterator:postIterator}" />
+            {f:if(condition: postIterator.isLast, else: ',')}
+        </f:for>],"settings": <f:render section="AllSettings" arguments="{settings:settings}" />,
+        </f:spaceless>
+
+        <f:if condition="{settings.lists.pagination.insertBelow}">
+            <f:spaceless>
+                "paginationBelow":  <f:render partial="Pagination/Pagination" arguments="{pagination: pagination}" />
+            </f:spaceless>
+        </f:if>
+        }
+    </f:then>
+    <f:else if="{posts}">
+        <f:spaceless>
+            {"list": [<f:for each="{posts}" iteration="postIterator" as="post">
+            <blogvh:cache post="{post}" />
+            <f:render section="PostListView" arguments="{post: post,settings:settings,postIterator:postIterator}" />
+            {f:if(condition: postIterator.isLast, else: ',')}
+            </f:for>],"settings": <f:render section="AllSettings" arguments="{settings:settings}" />}
+        </f:spaceless>
+    </f:else>
+    <f:else>
+        <div class="alert alert-info" role="alert">
+            <strong><f:translate key="list.no_posts.title" /></strong><br><f:translate key="list.no_posts.message" />
+        </div>
+    </f:else>
+</f:if>
+
+<f:section name="PostListView">
+
+<f:spaceless>
+    <f:format.raw>
+        <f:format.json value="{
+                uid: post.uid,
+                doktype: post.doktype,
+                title: post.title,
+                detail: '{f:uri.page(pageUid: post.uid)}',
+                abstract: post.abstract,
+                description: post.description,
+                commentsActive: post.commentsActive,
+                archiveDate: post.archiveDate,
+                publishDate: '{f:if(condition: post.publishDate, then: \'{post.publishDate -> f:format.date(format: settings.dateFormat)}\')}',
+                commentsActive: post.commentsActive,
+                crdate: '{f:if(condition: post.crdate, then: \'{post.crdate -> f:format.date(format: settings.dateFormat)}\')}',
+                media: '{f:render(partial: \'Files\', arguments: \'{files: post.media, view: \\\'list\\\', type: \\\'media\\\'}\') -> headless:format.json.decode()}',
+                featuredImage: '{f:render(partial: \'Files\', arguments: \'{feature: post.featuredImage, view: \\\'list\\\', type: \\\'media\\\'}\') -> headless:format.json.decode()}',
+                categories: '{f:render(section: \'Categories\', arguments: \'{categories: post.categories, settings: settings}\') -> headless:format.json.decode()}',
+                authors: '{f:render(section: \'Authors\', arguments: \'{authors: post.authors, settings: settings}\') -> headless:format.json.decode()}',
+                comments: '{f:render(section: \'Comments\', arguments: \'{comments: post.comments, settings: settings}\') -> headless:format.json.decode()}',
+                tags: '{f:render(section: \'Tags\', arguments: \'{tags: post.tags, settings: settings}\') -> headless:format.json.decode()}'
+            }"/>
+    </f:format.raw>
+</f:spaceless>
+</f:section>
+<f:section name="AllSettings">
+<f:spaceless>
+    <f:format.raw>
+        <f:format.json value="{layout: settings.layout}"/>
+    </f:format.raw>
+</f:spaceless>
+</f:section>
+<f:section name="Comments">
+<f:spaceless>
+  {"listComments": [<f:for each="{comments}" iteration="commentIterator" as="comment">
+  <f:format.raw>
+      <f:format.json value="{
+              uid: comment.uid,
+              pid: comment.pid,
+              name: '{f:if(condition: comment.name, then: comment.name)}',
+              email: '{f:if(condition: comment.email, then: comment.email)}',
+              url: '{f:if(condition: comment.url, then: comment.url)}',
+              comment: '{f:if(condition: comment.comment, then: \'{comment.comment -> blogvh:format.nl2p()}\')}',
+              crdate: '{f:if(condition: comment.crdate, then: \'{comment.crdate -> f:format.date(format: settings.comments.date.format)}\')}',
+              hp: comment.hp,
+              postLanguageId: comment.postLanguageId,
+              hidden: comment.hidden,
+    }"/>
+  </f:format.raw>
+  {f:if(condition: commentIterator.isLast, else: ',')}
+</f:for>]}
+</f:spaceless>
+</f:section>
+
+<f:section name="Authors">
+<f:spaceless>
+    {"listAuthors": [<f:for each="{authors}" iteration="authorIterator" as="author">
+    <f:format.raw>
+        <f:format.json value="{
+            uid: author.uid,
+            name: '{f:if(condition: author.name, then: author.name)}',
+            slug: '{f:if(condition: author.slug, then: author.slug)}',
+            title: '{f:if(condition: author.title, then: author.title)}',
+            website: '{f:if(condition: author.website, then: author.website)}',
+            profile: '{f:if(condition: author.profile, then: author.profile)}',
+            bio: '{f:if(condition: author.bio, then: author.bio)}',
+            image: '{f:render(partial: \'Files\', arguments: \'{feature: author.image, view: \\\'list\\\', type: \\\'media\\\'}\') -> headless:format.json.decode()}',
+            detailsPage: '{f:if(condition: author.detailsPage, then: author.detailsPage)}',
+        }"/>
+    </f:format.raw>
+    {f:if(condition: authorIterator.isLast, else: ',')}
+</f:for>],
+    "settings":
+    <f:format.raw>
+        <f:format.json value="{
+                      avatarSize: settings.authors.avatar.provider.size,
+                      authorUid: settings.authorUid
+                  }"/>}
+    </f:format.raw>
+</f:spaceless>
+</f:section>
+
+<f:section name="Tags">
+<f:spaceless>
+    {"listTags": [<f:for each="{tags}" iteration="tagIterator" as="tag">
+    <f:format.raw>
+        <f:format.json value="{
+                    uid: tag.uid,
+                    title: tag.title,
+                    tagLink: '{blogvh:link.tag(tag: tag, rss: true)}',
+                    description: '{f:if(condition: tag.description, then: tag.description)}',
+                    tagUid: '{f:if(condition: settings.tagUid, then: settings.tagUid)}',
+                    linkPage: '{f:link.page(pageUid: settings.tagUid)}',
+                    contentElementUidList: '{tag.contentElementUidList -> f:cObject(typoscriptObjectPath: \'lib.blog.contentElementRendering\')}'
+            }"/>
+    </f:format.raw>
+    {f:if(condition: tagIterator.isLast, else: ',')}
+</f:for>]}
+</f:spaceless>
+</f:section>
+
+
+<f:section name="Categories">
+<f:spaceless>
+{"listCategories":[<f:for each="{categories}" as="category" iteration="categoryIterator">
+    <f:format.raw>
+        <f:format.json value="{
+          id: category.uid,
+          pid: category.pid,
+          title: category.title,
+          description: category.description
+          slug: category.slug
+        }"/>
+    </f:format.raw>
+    {f:if(condition: categoryIterator.isLast, else: ',')}
+</f:for>]}
+</f:spaceless>
+</f:section>    

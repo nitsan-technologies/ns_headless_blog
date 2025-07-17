@@ -1,0 +1,32 @@
+<f:layout name="Post" />
+<f:section name="Content">
+
+    <f:if condition="{settings.comments.active}">
+            <f:if condition="{settings.comments.disqus._typoScriptNodeValue} !== '1'">
+                <f:if condition="{comments}">
+                        <div class="postcomments__list">
+                            <f:spaceless>
+                                {"comments": [<f:for each="{comments}" as="comment" iteration="commentIterator">
+                                "comment":   <f:render partial="Comments/Comment" arguments="{comment: comment}"/>
+                                {f:if(condition: commentIterator.isLast, else: ',')}
+                            </f:for>],
+                                "commentSettings":
+                                <f:format.raw>
+                                    <f:format.json value="{
+                                        active: settings.comments.active,
+                                        moderation: settings.comments.moderation,
+                                        respectPostLanguageId: settings.comments.respectPostLanguageId,
+                                        disqusShortName: settings.comments.disqusShortName,
+                                        disqusTypoScriptNodeValue: settings.comments.disqusTypoScriptNodeValue,
+                                        dateFormat: settings.comments.dateFormat,
+                                        dateFormat: settings.comments.dateFormat,
+                                        dateFormat: settings.comments.dateFormat,
+                                        action: 'list',
+                                    }"/>
+                                </f:format.raw>
+                            </f:spaceless>
+                        </div>
+                </f:if>
+            </f:if>
+    </f:if>
+</f:section>

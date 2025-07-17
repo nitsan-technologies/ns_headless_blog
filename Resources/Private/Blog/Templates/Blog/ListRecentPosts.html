@@ -1,0 +1,20 @@
+<f:layout name="Widget" />
+<f:section name="Title"></f:section>
+<f:section name="Content">
+    <f:spaceless>
+        {"recentPosts": [<f:for each="{posts}" iteration="recentPostIterator" as="post">
+            <f:render section="recentPostWidget" arguments="{post: post,settings:settings,recentPostIterator:recentPostIterator}" />
+        {f:if(condition: recentPostIterator.isLast, else: ',')}
+        </f:for>]
+    </f:spaceless>
+</f:section>
+<f:section name="recentPostWidget">
+    <f:spaceless>
+        <f:format.raw>
+            <f:format.json value="{
+                    uid: post.uid,
+                    title: post.title,
+                }"/>
+        </f:format.raw>
+    </f:spaceless>
+</f:section>

@@ -1,0 +1,101 @@
+plugin.tx_blog{
+    view {
+        partialRootPaths = EXT:ns_headless_blog/Resources/Private/Blog/Partials/
+        templateRootPaths = EXT:ns_headless_blog/Resources/Private/Blog/Templates/
+    }
+    settings.lists.pagination.insertAbove = 1
+    settings.lists.pagination.itemsPerPage = 10
+    settings.categoryUid = {$plugin.tx_blog.settings.categoryUid}
+}
+
+tt_content.list =< lib.contentElementWithHeader
+tt_content.list{
+    fields {
+        content {
+            fields {
+                data = CASE
+                data {
+                    key.field = list_type
+                    blog_posts = EXTBASEPLUGIN
+                    blog_posts {
+                        extensionName = Blog
+                        pluginName = Posts
+                        controller = Post
+                        view =< plugin.tx_blog.view
+                        persistence =< plugin.tx_blog.persistence
+                        settings =< plugin.blog_latestposts.settings
+                    }
+
+                    # Reuse the blog_posts object for blog latest posts
+                    blog_latestposts < .blog_posts
+                    blog_latestposts.pluginName = LatestPosts
+
+                    blog_demandedposts < .blog_posts
+                    blog_demandedposts.pluginName = DemandedPosts
+                    blog_demandedposts.controller = Post
+
+                    # Plugin : List By Author (For Simple Page plugin)
+                    blog_authorposts < .blog_posts
+                    blog_authorposts.pluginName = AuthorPosts
+
+                    # Plugin : List By Tag (For Simple Page plugin)
+                    blog_tag < .blog_posts
+                    blog_tag.pluginName = Tag
+
+                    # Plugin : List By Category (For Simple Page plugin)
+                    blog_category < .blog_posts
+                    blog_category.pluginName = Category
+
+                    blog_archive < .blog_posts
+                    blog_archive.pluginName = Archive
+
+                    blog_sidebar < .blog_posts
+                    blog_sidebar.pluginName = Sidebar
+                    blog_sidebar.controller = Post
+
+                    #Reuse the blog_posts object for blog recent post widget
+                    blog_recentpostswidget < .blog_posts
+                    blog_recentpostswidget.pluginName = RecentPostsWidget
+                    blog_recentpostswidget.controller = Widget
+
+                    blog_tagwidget < .blog_posts
+                    blog_tagwidget.pluginName = TagWidget
+                    blog_tagwidget.controller = Widget
+
+                    #Reuse the blog_recentpost's widget object for the comment blog widget
+                    blog_commentswidget < .blog_posts
+                    blog_commentswidget.pluginName = CommentsWidget
+                    blog_commentswidget.controller = Widget
+
+                    blog_feedwidget < .blog_posts
+                    blog_feedwidget.pluginName = FeedWidget
+                    blog_feedwidget.controller = Widget
+
+                    blog_archivewidget < .blog_posts
+                    blog_archivewidget.pluginName = ArchiveWidget
+                    blog_archivewidget.controller = Widget
+
+                    #Blog post page - plugins Plugin : Authors (In Blog type Page plugin)
+                    blog_authors < .blog_posts
+                    blog_authors.pluginName = Authors
+                    blog_authors.controller = Post
+
+                    blog_relatedposts < .blog_posts
+                    blog_relatedposts.pluginName = RelatedPosts
+                    
+                }
+                
+                # Include plugin settings from FlexForm
+                // settings {
+                //     dataProcessing {
+                //         10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+                //         10 {
+                //             fieldName = pi_flexform
+                //             as = flexform
+                //         }
+                //     }
+                // }
+            }
+        }
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "name": "nitsan/ns-headless-blog",
+    "type": "typo3-cms-extension",
+    "description": "",
+    "authors": [],
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "typo3/cms-core": "^12.0 || ^13.0",
+        "t3g/blog": "^13.0"
+    },
+    "keywords": [
+    "TYPO3 CMS",
+    "Headless CMS",
+    "JSON API",
+    "NS Headless Blog",
+    "TYPO3 Blog",
+    "Headless TYPO3",
+    "Blog Content JSON",
+    "TYPO3 Headless Blog"
+  ],
+    "support": {
+    "issues": "https://github.com/nitsan-technologies/ns_headless_blog/issues"
+  },
+    "autoload": {
+        "psr-4": {
+            "NITSAN\\NsHeadlessBlog\\": "Classes/"
+        }
+    },
+    "replace": {
+        "typo3-ter/ns-headless-blog": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/public",
+            "extension-key": "ns_headless_blog"
+        }
+    }
+}

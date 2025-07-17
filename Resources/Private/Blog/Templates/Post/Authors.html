@@ -1,0 +1,45 @@
+<f:layout name="Post" />
+<f:section name="Content">
+  <f:if condition="{post.authors}">
+    <div class="postauthors">
+      <f:spaceless>
+        {"listAuthors": [<f:for each="{post.authors}" iteration="authorIterator" as="author">
+              <f:render section="authors" arguments="{author: author,settings:settings,authorIterator:authorIterator}" />
+          {f:if(condition: authorIterator.isLast, else: ',')}
+      </f:for>],
+        "settings":
+        <f:format.raw>
+          <f:format.json value="{
+              avatarSize: settings.authors.avatar.provider.size,
+              authorUid: settings.authorUid
+          }"/>}
+        </f:format.raw>
+      </f:spaceless>
+    </div>
+  </f:if>
+</f:section>
+
+<f:section name="authors">
+  <f:spaceless>
+    <f:format.raw>
+      <f:format.json value="{
+                    uid: author.uid,
+                    name: '{f:if(condition: author.name, then: author.name)}',
+                    slug: '{f:if(condition: author.slug, then: author.slug)}',
+                    title: '{f:if(condition: author.title, then: author.title)}',
+                    website: '{f:if(condition: author.website, then: author.website)}',
+                    email: '{f:if(condition: author.email, then: author.email)}',
+                    location: '{f:if(condition: author.location, then: author.location)}',
+                    twitter: '{f:if(condition: author.twitter, then: author.twitter)}',
+                    twitter: '{f:if(condition: author.twitter, then: author.twitter)}',
+                    linkedin: '{f:if(condition: author.linkedin, then: author.linkedin)}',
+                    xing: '{f:if(condition: author.xing, then: author.xing)}',
+                    instagram: '{f:if(condition: author.instagram, then: author.instagram)}',
+                    profile: '{f:if(condition: author.profile, then: author.profile)}',
+                    bio: '{f:if(condition: author.bio, then: author.bio)}',
+                    detailsPage: '{f:if(condition: author.detailsPage, then: author.detailsPage)}',
+                    image: '{f:render(partial: \'Files\', arguments: \'{feature: author.image, view: \\\'list\\\', type: \\\'media\\\'}\') -> headless:format.json.decode()}'
+                }"/>
+    </f:format.raw>
+  </f:spaceless>
+</f:section>

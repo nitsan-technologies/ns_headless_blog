@@ -1,0 +1,11 @@
+<f:layout name="Widget" />
+<f:section name="Title"></f:section>
+<f:section name="Content">
+    <f:spaceless>
+      ,"rssFeed":
+      <f:format.json value="{
+        blogUid: settings.blogUid,
+        recentPost: '{f:link.page(pageUid: settings.blogUid, class: \'blogwidgetlist__itemlink\', title: \'Recent posts\', pageType: \'200\')}'
+      }"/>}
+    </f:spaceless>
+</f:section>

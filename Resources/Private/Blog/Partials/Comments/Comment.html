@@ -1,0 +1,24 @@
+<f:spaceless>
+<f:format.raw>
+    <f:format.json value="{
+      uid: comment.uid,
+      pid: comment.pid,
+      name: comment.name,
+      email: comment.title,
+      url: comment.url,
+      comment: '{comment.comment -> blogvh:format.nl2p()}',
+      crdate: '{f:if(condition: comment.crdate, then: \'{comment.crdate -> f:format.date(format: settings.comments.date.format)}\')}',
+      hp: comment.hp,
+      postLanguageId: comment.postLanguageId,
+      hidden: comment.hidden
+}"/>
+</f:format.raw>
+<f:section name="CommentUrl">
+    <f:if condition="{comment.url} && {settings.comments.features.urls}">
+        <f:then>
+            <f:link.external uri="{comment.url}" target="_blank" rel="external nofollow"><span itemprop="name">{content}</span></f:link.external>
+        </f:then>
+        <f:else><span itemprop="name">{content}</span></f:else>
+    </f:if>
+</f:section>
+</f:spaceless>

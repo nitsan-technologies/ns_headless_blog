@@ -1,0 +1,91 @@
+<f:layout name="Default" />
+<f:section name="Content">
+    <f:if condition="{author}">
+        <f:then>
+            <header class="blogarchiveheader blogarchiveheader--author">
+                <h1 class="blogarchiveheader__title">
+                    <span class="blogarchiveheader__titletext">
+                        <f:translate key="headline.author.simple" />:
+                        {author.name}
+                    </span>
+                    <blogvh:link.author class="blogarchiveheader__titlelink" rss="true" author="{author}">
+                        <span class="blogicon"><f:render partial="General/SocialIcons" section="Rss" optional="true" /></span>
+                    </blogvh:link.author>
+                </h1>
+                <f:if condition="{author.bio}">
+                    <div class="blogarchiveheader__description">
+                        <p>{author.bio}</p>
+                    </div>
+                </f:if>
+                <f:if condition="{author.allTags}">
+                    <div class="blogarchiveheader__taxonomy blogarchiveheader__taxonomy--tags">
+                        <ul class="blogtaglist">
+                            <f:for each="{author.allTags}" as="tag">
+                                <li class="blogtaglist__item"><blogvh:link.tag class="blogbadge" tag="{tag}"/></li>
+                            </f:for>
+                        </ul>
+                    </div>
+                </f:if>
+            </header>
+            <f:render partial="List" arguments="{_all}" />
+            <f:if condition="{settings.authorUid}">
+                <footer class="blogarchivefooter blogarchivefooter--author">
+                    <div class="blogarchivefooter__backlink">
+                        <f:link.page pageUid="{settings.authorUid}">
+                            <f:translate key="list.backlink.authors" />
+                        </f:link.page>
+                    </div>
+                </footer>
+            </f:if>
+
+        </f:then>
+        <f:else>
+
+            <header class="blogarchiveheader blogarchiveheader--authors">
+                <h1 class="blogarchiveheader__title">
+                    <span class="blogarchiveheader__titletext"><f:translate key="headline.authors" /></span>
+                </h1>
+            </header>
+            <div class="bloglist bloglist--authors">
+                <f:spaceless>
+                    {"listAuthors": [<f:for each="{authors}" iteration="authorIterator" as="author">
+                    <f:render section="authors" arguments="{author: author,settings:settings,authorIterator:authorIterator}" />
+                    {f:if(condition: authorIterator.isLast, else: ',')}
+                </f:for>],
+                    "settings":
+                    <f:format.raw>
+                        <f:format.json value="{
+                              avatarSize: settings.authors.avatar.provider.size,
+                              authorUid: settings.authorUid
+                          }"/>}
+                    </f:format.raw>
+                </f:spaceless>
+            </div>
+
+        </f:else>
+    </f:if>
+</f:section>
+<f:section name="authors">
+    <f:spaceless>
+        <f:format.raw>
+            <f:format.json value="{
+                    uid: author.uid,
+                    name: '{f:if(condition: author.name, then: author.name)}',
+                    slug: '{f:if(condition: author.slug, then: author.slug)}',
+                    title: '{f:if(condition: author.title, then: author.title)}',
+                    website: '{f:if(condition: author.website, then: author.website)}',
+                    email: '{f:if(condition: author.email, then: author.email)}',
+                    location: '{f:if(condition: author.location, then: author.location)}',
+                    twitter: '{f:if(condition: author.twitter, then: author.twitter)}',
+                    twitter: '{f:if(condition: author.twitter, then: author.twitter)}',
+                    linkedin: '{f:if(condition: author.linkedin, then: author.linkedin)}',
+                    xing: '{f:if(condition: author.xing, then: author.xing)}',
+                    instagram: '{f:if(condition: author.instagram, then: author.instagram)}',
+                    profile: '{f:if(condition: author.profile, then: author.profile)}',
+                    bio: '{f:if(condition: author.bio, then: author.bio)}',
+                    detailsPage: '{f:if(condition: author.detailsPage, then: author.detailsPage)}',
+                    image: '{f:render(partial: \'Files\', arguments: \'{feature: author.image, view: \\\'list\\\', type: \\\'media\\\'}\') -> headless:format.json.decode()}'
+                }"/>
+        </f:format.raw>
+    </f:spaceless>
+</f:section>

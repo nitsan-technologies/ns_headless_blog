@@ -1,0 +1,59 @@
+<f:layout name="Default" />
+<f:section name="Content">
+    <f:if condition="!{archiveData}">
+        <f:then>
+
+            <f:comment>If a year/+month is selected show posts matching.</f:comment>
+            <header class="blogarchiveheader blogarchiveheader--archive">
+                <h1 class="blogarchiveheader__title">
+                    <span class="blogarchiveheader__titletext">
+                        <f:if condition="{month}">{f:format.date(format: '{settings.widgets.archive.monthDateFormat}', date: timestamp)}</f:if> {year}
+                    </span>
+                    <blogvh:link.archive class="blogarchiveheader__titlelink" rss="true" year="{year}" month="{month}">
+                        <span class="blogicon"><f:render partial="General/SocialIcons" section="Rss" optional="true" /></span>
+                    </blogvh:link.archive>
+                </h1>
+            </header>
+            <f:render partial="List" arguments="{_all}" />
+            <f:if condition="{settings.authorUid}">
+                <footer class="blogarchivefooter blogarchivefooter--archive">
+                    <div class="blogarchivefooter__backlink">
+                        <f:link.page pageUid="{settings.archiveUid}">
+                            <f:translate key="list.backlink.archive" />
+                        </f:link.page>
+                    </div>
+                </footer>
+            </f:if>
+        </f:then>
+        <f:else>
+            <f:spaceless>
+                {"archiveData": [<f:for each="{archiveData}" iteration="archiveIterator" as="years">
+                <f:for each="{years}" as="month">
+                    <f:render section="archiveView" arguments="{settings: settings, year: year, month: month}" />
+                    {f:if(condition: archiveIterator.isLast, else: ',')}
+                </f:for></f:for>],
+                "settings":
+                <f:format.raw>
+                    <f:format.json value="{
+                        monthFormat: settings.archive.monthDateFormat,
+                        yearFormat: settings.archive.yearDateFormat,
+                        showCounter: settings.archive.showCounter,
+                    }"/>}
+                </f:format.raw>
+            </f:spaceless>
+        </f:else>
+    </f:if>
+</f:section>
+<f:section name="archiveView">
+        <f:spaceless>[
+            <f:format.json value="{
+                year: year,
+                month: month.month,
+                count: month.count,
+                timestamp: month.timestamp,
+                timestampMonth: '{f:if(condition: month.timestamp, then: \'{month.timestamp -> f:format.date(format: settings.widgets.archive.yearDateFormat)}\')}',
+                timestampYear: '{f:if(condition: month.timestamp, then: \'{month.timestamp -> f:format.date(format: settings.widgets.archive.monthDateFormat)}\')}'
+                linkYear: '{year -> blogvh:link.archive(year: year, title: year)}',
+            }"/>]
+        </f:spaceless>
+</f:section>

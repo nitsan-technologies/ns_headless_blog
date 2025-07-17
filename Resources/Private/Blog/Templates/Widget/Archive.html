@@ -1,0 +1,45 @@
+<f:layout name="Widget" />
+<f:section name="Title"></f:section>
+<f:section name="Content">
+    <f:variable name="years" value="{archiveData}" />
+    <f:if condition="{years}">
+        <f:if condition="{settings.widgets.archive.groupByYear} == 1">
+            <f:then>
+
+            </f:then>
+            <f:else>
+                <f:spaceless>
+                    ,"archiveData": [<f:for each="{years}" iteration="archiveIterator" as="months">
+                        <f:for each="{months}" iteration="monthIterator" as="month">
+                            <f:render section="Month" arguments="{settings: settings, year: year, month: month}" />
+                                {f:if(condition: monthIterator.isLast, else: ',')}
+                        </f:for>
+                    {f:if(condition: archiveIterator.isLast, else: ',')}
+                </f:for>],
+                    "settings":
+                    <f:format.raw>
+                        <f:format.json value="{
+                        monthFormat: settings.widgets.archive.monthDateFormat,
+                        yearFormat: settings.widgets.archive.yearDateFormat,
+                        groupByYear: settings.widgets.archive.groupByYear,
+                        showCounter: settings.widgets.archive.showCounter,
+                    }"/>
+                    </f:format.raw>
+                </f:spaceless>
+            </f:else>
+        </f:if>
+    </f:if>
+</f:section>
+<f:section name="Month">
+    <f:spaceless>
+        <f:format.json value="{
+            year: year,
+            month: month.month,
+            count: month.count,
+            timestamp: month.timestamp,
+            timestampMonth: '{f:if(condition: month.timestamp, then: \'{month.timestamp -> f:format.date(format: settings.widgets.archive.yearDateFormat)}\')}',
+            timestampYear: '{f:if(condition: month.timestamp, then: \'{month.timestamp -> f:format.date(format: settings.widgets.archive.monthDateFormat)}\')}'
+            linkYear: '{year -> blogvh:link.archive(year: year, title: year)}',
+        }"/>
+    </f:spaceless>
+</f:section>

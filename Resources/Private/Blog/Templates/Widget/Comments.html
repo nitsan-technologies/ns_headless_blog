@@ -1,0 +1,45 @@
+<f:layout name="Widget" />
+<f:section name="Title"></f:section>
+<f:section name="Content">
+    <f:spaceless>
+      ,"recentComments": [<f:for each="{comments}" as="comment" iteration="commentIterator">
+          <f:render section="commentWidgetView" arguments="{comment: comment, settings: settings}"/>
+      {f:if(condition: commentIterator.isLast, else: ',')}
+    </f:for>],
+      "commentSettings":
+      <f:format.raw>
+        <f:format.json value="{
+            active: settings.comments.active,
+            moderation: settings.comments.moderation,
+            respectPostLanguageId: settings.comments.respectPostLanguageId,
+            disqusShortName: settings.comments.disqusShortName,
+            disqusTypoScriptNodeValue: settings.comments.disqusTypoScriptNodeValue,
+            dateFormat: settings.comments.dateFormat,
+            dateFormat: settings.comments.dateFormat,
+            dateFormat: settings.comments.dateFormat,
+            action: 'comments',
+        }"/>
+      </f:format.raw>
+    </f:spaceless>
+</f:section>
+
+<f:section name="commentWidgetView">
+  <f:spaceless>
+    <f:format.raw>
+      <f:format.json value="{
+        uid: comment.uid,
+        pid: comment.pid,
+        name: '{comment.name -> blogvh:format.nl2p()}',
+        email: comment.title,
+        url: comment.url,
+        comment: '{comment.comment -> blogvh:format.nl2p()}',
+        crdate: '{f:if(condition: comment.crdate, then: \'{comment.crdate -> f:format.date(format: settings.comments.date.format)}\')}',
+        hp: comment.hp,
+        postLanguageId: comment.postLanguageId,
+        hidden: comment.hidden,
+        commentOnPost: '{blogvh:link.post(class: \'blogwidgetlist__itemlink\', post: comment.post, section: \'comment-{comment.uid}\')}'
+      }"/>
+    </f:format.raw>
+  </f:spaceless>
+</f:section>
+
