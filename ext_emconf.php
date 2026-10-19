@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = array (
   'title' => 'ns_headless_blog – Easily Output TYPO3 Blog Content as JSON',
   'description' => 'ns_headless_blog TYPO3 extension helps you render blog content in clean JSON format for headless CMS integrations & modern frontend frameworks',
   'category' => 'plugin',
-  'version' => '13.0.1',
+  'version' => '13.0.2',
   'state' => 'stable',
   'uploadfolder' => false,
   'clearcacheonload' => true,
@@ -31,6 +31,7 @@ $EM_CONF[$_EXTKEY] = array (
     'depends' => 
     array (
       'typo3' => '12.5.0-13.5.99',
+      'ns_license' => '14.5.4-14.9.99',
       'frontend' => '12.0.0-13.5.99',
       'headless' => '4.0.0-4.5.9',
       'blog' => '12.0.0-13.5.99',
