@@ -31,6 +31,7 @@ $EM_CONF[$_EXTKEY] = array (
     'depends' => 
     array (
       'typo3' => '12.5.0-13.5.99',
+      'ns_license' => '14.5.4-14.9.99',
       'frontend' => '12.0.0-13.5.99',
       'headless' => '4.0.0-4.5.9',
       'blog' => '12.0.0-13.5.99',
